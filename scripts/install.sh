@@ -28,6 +28,10 @@ echo "💻 Install Node.js version 24"
 curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
 sudo apt install -y nodejs
 
+# Install Bun
+echo "💻 Install Bun"
+curl -fsSL https://bun.sh/install | bash
+
 # Install node module
 echo "💻 Install node module"
 npm install pm2@latest -g
@@ -39,5 +43,6 @@ docker --version
 docker compose version
 nginx -v
 node --version
+bun --version
 pm2 --version
 pnpm --version

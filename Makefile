@@ -9,3 +9,7 @@ install:
 .PHONY: nginx
 nginx:
 	bash ./scripts/nginx.sh
+
+.PHONY: setup-framework
+setup-framework:
+	bash ./scripts/setup-framework.sh
