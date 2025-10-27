@@ -3,6 +3,7 @@ set -e
 
 # Update package lists
 sudo apt update
+sudo apt install unzip -y
 
 # Install Docker
 echo "🐳 Install Docker"
