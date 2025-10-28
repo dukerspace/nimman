@@ -38,6 +38,7 @@ echo "💻 Install node module"
 npm install pm2@latest -g
 npm install -g pnpm
 
+exec $SHELL
 
 # Display versions of installed software
 docker --version

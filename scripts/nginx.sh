@@ -12,8 +12,8 @@ else
 fi
 
 # Check if required variables are set
-if [[ -z "$DOMAIN_NAME" || -z "$EMAIL" || -z "$API_PORT" || -z "$UI_PORT" ]]; then
-    echo "❌ Error: Missing environment variables (DOMAIN, EMAIL, API_PORT, UI_PORT). Check your .env file."
+if [[ -z "$DOMAIN_NAME" || -z "$EMAIL" || -z "$API_PORT" ]]; then
+    echo "❌ Error: Missing environment variables (DOMAIN, EMAIL, API_PORT). Check your .env file."
     exit 1
 fi
 
@@ -39,14 +39,26 @@ server {
     listen 80;
     server_name $DOMAIN_NAME;
 
+    root /var/www/frontend;
+    index index.html;
+
+    # Handle client-side routing
     location / {
-        proxy_pass http://localhost:$UI_PORT;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade \$http_upgrade;
-        proxy_set_header Connection 'upgrade';
-        proxy_set_header Host \$host;
-        proxy_cache_bypass \$http_upgrade;
+      try_files \\\$uri \\\$uri/ /index.html;
     }
+
+    # Cache static assets
+    location ~* \\.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$ {
+      expires 1y;
+      add_header Cache-Control "public, immutable";
+    }
+
+    # Security headers
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-XSS-Protection "1; mode=block" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+  }
 }
 EOF
 
@@ -67,7 +79,7 @@ sudo systemctl start certbot.timer
 echo "🔐 Configuring Nginx for SSL..."
 sudo bash -c "cat > $NGINX_CONF" <<EOF
 upstream frontend {
-    server localhost:$UI_PORT;
+    server localhost;
 }
 
 upstream backend {
