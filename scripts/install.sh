@@ -1,22 +1,9 @@
 #!/bin/bash
-set -e
+set -euo pipefail
 
 # Update package lists
 sudo apt update
 sudo apt install unzip -y
-
-# Install Docker
-echo "🐳 Install Docker"
-sudo apt install -y docker.io
-
-# Add your user to the docker group
-sudo usermod -aG docker $USER
-
-# Install Docker Compose
-echo "🐳 Install Docker Compose"
-mkdir -p ~/.docker/cli-plugins/
-curl -SL https://github.com/docker/compose/releases/download/v2.3.3/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose
-chmod +x ~/.docker/cli-plugins/docker-compose
 
 # Install Nginx
 echo "💻 Install Nginx"
@@ -24,9 +11,9 @@ sudo sudo apt install -y nginx certbot python3-certbot-nginx
 sudo systemctl start nginx
 sudo systemctl enable nginx
 
-# Install Node.js version 24
+# Install Node.js (using NodeSource setup script for v22.x)
 echo "💻 Install Node.js version 24"
-curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
+curl -fsSL https://deb.nodesource.com/setup_24.x | sudo -E bash -
 sudo apt install -y nodejs
 
 # Install Bun
@@ -41,8 +28,6 @@ npm install -g pnpm
 exec $SHELL
 
 # Display versions of installed software
-docker --version
-docker compose version
 nginx -v
 node --version
 bun --version

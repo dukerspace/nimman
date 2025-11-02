@@ -77,10 +77,6 @@ sudo systemctl start certbot.timer
 # Modify Nginx config for SSL
 echo "🔐 Configuring Nginx for SSL..."
 sudo bash -c "cat > $NGINX_CONF" <<EOF
-upstream frontend {
-    server localhost;
-}
-
 upstream backend {
     server localhost:$API_PORT;
 }
@@ -103,7 +99,7 @@ server {
 
     # Handle client-side routing
     location / {
-      try_files \\\$uri \\\$uri/ /index.html;
+      try_files $uri /index.html;
     }
 
     # Cache static assets

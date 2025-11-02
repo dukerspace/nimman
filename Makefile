@@ -2,14 +2,18 @@
 db-up:
 	bash ./scripts/db.sh
 
-.PHONY: install
-install:
+.PHONY: install:base
+install:base:
 	bash ./scripts/install.sh
 
-.PHONY: nginx
-nginx:
+install:docker:
+	bash ./scripts/docker.sh
+
+.PHONY: install:nginx
+install:nginx:
 	bash ./scripts/nginx.sh
 
 .PHONY: setup-framework
 setup-framework:
 	bash ./scripts/setup-framework.sh
+
