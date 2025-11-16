@@ -120,20 +120,20 @@ server {
 
     # Redirect to HTTPS will be added after cert issuance
     location / {
-        proxy_pass http://frontend_upstream;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade \\$http_upgrade;
-        proxy_set_header Connection 'upgrade';
-        proxy_set_header Host \\$host;
+      proxy_pass http://frontend_upstream;
+      proxy_http_version 1.1;
+      proxy_set_header Upgrade \\$http_upgrade;
+      proxy_set_header Connection 'upgrade';
+      proxy_set_header Host \\$host;
     }
 
     location /api {
-        proxy_pass http://backend_upstream;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade \\$http_upgrade;
-        proxy_set_header Connection 'upgrade';
-        proxy_set_header Host \\$host;
-        proxy_cache_bypass \\$http_upgrade;
+      proxy_pass http://backend_upstream;
+      proxy_http_version 1.1;
+      proxy_set_header Upgrade \\$http_upgrade;
+      proxy_set_header Connection 'upgrade';
+      proxy_set_header Host \\$host;
+      proxy_cache_bypass \\$http_upgrade;
     }
 }
 EOF
@@ -173,7 +173,7 @@ server {
     index index.html;
 
     location / {
-      try_files $uri $uri/ /index.html;
+      try_files \$uri \$uri/ /index.html;
     }
 
     location ~* \\.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$ {
@@ -202,21 +202,21 @@ server {
 
     # Frontend (SPA/SSR) root path is proxied to frontend service
     location / {
-        proxy_pass http://frontend_upstream;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade \\$http_upgrade;
-        proxy_set_header Connection 'upgrade';
-        proxy_set_header Host \\$host;
+      proxy_pass http://frontend_upstream;
+      proxy_http_version 1.1;
+      proxy_set_header Upgrade \$http_upgrade;
+      proxy_set_header Connection "upgrade";
+      proxy_set_header Host \$host;
     }
 
     # Backend API
     location /api {
-        proxy_pass http://backend_upstream;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade \\$http_upgrade;
-        proxy_set_header Connection 'upgrade';
-        proxy_set_header Host \\$host;
-        proxy_cache_bypass \\$http_upgrade;
+      proxy_pass http://backend_upstream;
+      proxy_http_version 1.1;
+      proxy_set_header Upgrade \\$http_upgrade;
+      proxy_set_header Connection 'upgrade';
+      proxy_set_header Host \\$host;
+      proxy_cache_bypass \\$http_upgrade;
     }
 }
 EOF
