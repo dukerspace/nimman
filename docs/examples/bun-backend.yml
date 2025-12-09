@@ -1,0 +1,37 @@
+# Bun Backend with TypeScript Example
+# Modern Bun runtime with TypeScript
+
+project:
+  name: api-server
+  domain: api.example.com
+  email: admin@example.com
+
+services:
+  # Bun Backend API
+  - name: backend
+    type: backend
+    runtime: bun
+    port: 3001
+    path: .
+    build:
+      command: bun run build
+    start:
+      command: bun run src/index.ts
+    instances: 4
+    env:
+      NODE_ENV: production
+      PORT: 3001
+      DATABASE_URL: postgresql://localhost/mydb
+      REDIS_URL: redis://localhost:6379
+
+nginx:
+  enabled: true
+
+ssl:
+  enabled: true
+  provider: certbot
+
+pm2:
+  instances: 1
+  maxMemory: 1G
+

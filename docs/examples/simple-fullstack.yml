@@ -1,0 +1,49 @@
+# Simple Full-Stack Application Example
+# React/Vue Frontend + Express.js Backend
+
+project:
+  name: my-app
+  domain: myapp.com
+  email: admin@myapp.com
+
+services:
+  # Frontend - React/Vue/Angular SPA
+  - name: frontend
+    type: frontend
+    runtime: node
+    port: 3000
+    path: frontend
+    build:
+      command: npm run build
+      output: dist
+    start:
+      command: echo "Frontend served by Nginx"
+
+  # Backend - Express.js API
+  - name: backend
+    type: backend
+    runtime: node
+    port: 3001
+    path: backend
+    build:
+      command: npm run build
+    start:
+      command: node dist/index.js
+    instances: 2
+    env:
+      NODE_ENV: production
+      PORT: 3001
+      DATABASE_URL: postgresql://localhost/mydb
+      JWT_SECRET: your-secret-key
+
+nginx:
+  enabled: true
+
+ssl:
+  enabled: true
+  provider: certbot
+
+pm2:
+  instances: 1
+  maxMemory: 500M
+

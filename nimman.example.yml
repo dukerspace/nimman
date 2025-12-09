@@ -1,0 +1,56 @@
+project:
+  name: my-app
+  domain: example.com
+  email: admin@example.com
+
+services:
+  # Frontend service (served by Nginx)
+  - name: frontend
+    type: frontend
+    runtime: node
+    port: 3000
+    path: frontend
+    build:
+      command: npm run build
+      output: dist
+    start:
+      command: echo "Frontend served by Nginx"
+
+  # Backend API service
+  - name: backend
+    type: backend
+    runtime: bun
+    port: 3001
+    path: backend
+    build:
+      command: npm run build
+    start:
+      command: bun run index.ts
+    instances: 2
+    env:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://localhost/mydb
+      PORT: 3001
+
+  # Additional service example
+  - name: worker
+    type: service
+    runtime: node
+    port: 3002
+    path: worker
+    start:
+      command: node worker.js
+    instances: 1
+
+nginx:
+  enabled: true
+  configPath: /etc/nginx/sites-available
+
+ssl:
+  enabled: true
+  provider: certbot
+
+pm2:
+  instances: 1
+  maxMemory: 500M
+

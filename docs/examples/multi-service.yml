@@ -1,0 +1,62 @@
+# Multi-Service Application Example
+# Frontend + Backend API + Background Worker
+
+project:
+  name: complex-app
+  domain: app.example.com
+  email: admin@example.com
+
+services:
+  # Frontend - Static SPA
+  - name: frontend
+    type: frontend
+    runtime: node
+    port: 3000
+    path: frontend
+    build:
+      command: npm run build
+      output: dist
+    start:
+      command: echo "Frontend served by Nginx"
+
+  # API Backend
+  - name: api
+    type: backend
+    runtime: node
+    port: 3001
+    path: api
+    build:
+      command: npm run build
+    start:
+      command: node dist/index.js
+    instances: 2
+    env:
+      NODE_ENV: production
+      PORT: 3001
+      DATABASE_URL: postgresql://localhost/mydb
+
+  # Background Worker - Processes jobs from queue
+  - name: worker
+    type: service
+    runtime: node
+    port: 3002
+    path: worker
+    start:
+      command: node worker.js
+    instances: 1
+    env:
+      NODE_ENV: production
+      REDIS_URL: redis://localhost:6379
+      DATABASE_URL: postgresql://localhost/mydb
+
+nginx:
+  enabled: true
+
+ssl:
+  enabled: true
+  provider: certbot
+
+pm2:
+  instances: 1
+  maxMemory: 500M
+

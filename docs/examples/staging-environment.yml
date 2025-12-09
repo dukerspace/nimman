@@ -1,0 +1,49 @@
+# Staging Environment Configuration Example
+# Use with: nimman deploy --config staging.yml --env staging
+
+project:
+  name: my-app-staging
+  domain: staging.myapp.com
+  email: dev@myapp.com
+
+services:
+  # Frontend with staging build
+  - name: frontend
+    type: frontend
+    runtime: node
+    port: 3000
+    path: frontend
+    build:
+      command: npm run build:staging
+      output: dist
+    start:
+      command: echo "Frontend served by Nginx"
+
+  # Backend with staging configuration
+  - name: backend
+    type: backend
+    runtime: node
+    port: 3001
+    path: backend
+    build:
+      command: npm run build
+    start:
+      command: node dist/index.js
+    instances: 1
+    env:
+      NODE_ENV: staging
+      PORT: 3001
+      DATABASE_URL: postgresql://localhost/mydb_staging
+      LOG_LEVEL: debug
+
+nginx:
+  enabled: true
+
+ssl:
+  enabled: true
+  provider: certbot
+
+pm2:
+  instances: 1
+  maxMemory: 300M
+
